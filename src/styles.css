@@ -1,0 +1,346 @@
+:root {
+  color-scheme: light dark;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.app {
+  --bg: #f7f8fb;
+  --surface: #ffffff;
+  --surface-strong: #f0f4f8;
+  --text: #172033;
+  --muted: #64748b;
+  --border: #d8e0ea;
+  --primary: #0f766e;
+  --primary-strong: #0b5f59;
+  --primary-soft: #d9fbf4;
+  --success: #15803d;
+  --success-strong: #166534;
+  --danger: #b42318;
+  --shadow: 0 24px 70px rgba(15, 23, 42, 0.12);
+
+  align-items: center;
+  background:
+    linear-gradient(135deg, rgba(15, 118, 110, 0.12), transparent 38%),
+    var(--bg);
+  color: var(--text);
+  display: flex;
+  min-height: 100dvh;
+  padding: 24px;
+}
+
+.app.dark {
+  --bg: #101419;
+  --surface: #171d24;
+  --surface-strong: #202833;
+  --text: #eef4f8;
+  --muted: #9aa8b7;
+  --border: #313b48;
+  --primary: #5eead4;
+  --primary-strong: #99f6e4;
+  --primary-soft: #123d3a;
+  --success: #4ade80;
+  --success-strong: #86efac;
+  --danger: #fca5a5;
+  --shadow: 0 24px 70px rgba(0, 0, 0, 0.38);
+}
+
+.shell {
+  margin: 0 auto;
+  max-width: 560px;
+  width: 100%;
+}
+
+.topbar {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.brand {
+  align-items: center;
+  display: flex;
+  gap: 14px;
+}
+
+.brandIcon,
+.iconButton {
+  align-items: center;
+  border-radius: 8px;
+  display: inline-flex;
+  height: 44px;
+  justify-content: center;
+  width: 44px;
+}
+
+.brandIcon {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+h1,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: 1.6rem;
+  line-height: 1.15;
+}
+
+.brand p {
+  color: var(--muted);
+  font-size: 0.92rem;
+  margin-top: 3px;
+}
+
+.iconButton {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  cursor: pointer;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+.iconButton:hover {
+  background: var(--surface-strong);
+}
+
+.iconButton:active {
+  transform: scale(0.96);
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  padding: 24px;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+}
+
+.field span,
+.outputLabel {
+  color: var(--muted);
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+input {
+  background: var(--surface-strong);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 0.92rem;
+  min-height: 52px;
+  outline: none;
+  overflow: hidden;
+  padding: 0 14px;
+  text-overflow: ellipsis;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+  width: 100%;
+}
+
+input::placeholder {
+  color: var(--muted);
+  font-size: 0.82rem;
+  opacity: 0.85;
+}
+
+input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 22%, transparent);
+}
+
+.helpText,
+.errorText {
+  font-size: 0.92rem;
+  line-height: 1.5;
+  margin-top: 9px;
+}
+
+.helpText {
+  color: var(--muted);
+}
+
+.errorText {
+  color: var(--danger);
+}
+
+.generateButton {
+  align-items: center;
+  background: var(--surface-strong);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  cursor: pointer;
+  display: inline-flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 18px;
+  min-height: 48px;
+  padding: 0 16px;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease;
+  width: 100%;
+}
+
+.generateButton:hover {
+  background: var(--primary-soft);
+  border-color: var(--primary);
+}
+
+.generateButton:active {
+  transform: scale(0.99);
+}
+
+.output {
+  align-items: center;
+  display: grid;
+  gap: 14px;
+  justify-items: center;
+  margin: 28px 0;
+  padding: 24px 16px;
+  text-align: center;
+}
+
+.codeRow {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  width: 100%;
+}
+
+.codeButton {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: var(--text);
+  cursor: pointer;
+  font-family:
+    "SFMono-Regular", Consolas, "Liberation Mono", Menlo, ui-monospace,
+    monospace;
+  font-size: clamp(3rem, 12vw, 5.2rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  line-height: 1;
+  min-height: 1em;
+  padding: 4px 8px;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+.codeButton:hover:not(:disabled) {
+  background: var(--surface-strong);
+  border-color: var(--border);
+}
+
+.codeButton:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.codeButton.empty {
+  color: var(--muted);
+  cursor: not-allowed;
+}
+
+.copyButton {
+  align-items: center;
+  background: var(--primary);
+  border: 0;
+  border-radius: 8px;
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-flex;
+  gap: 8px;
+  justify-content: center;
+  min-height: 46px;
+  min-width: 100px;
+  padding: 0 16px;
+  transition:
+    background-color 180ms ease,
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.copyButton:hover:not(:disabled) {
+  background: var(--primary-strong);
+}
+
+.copyButton:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.copyButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.copyButton.copied,
+.copyButton.copied:hover:not(:disabled) {
+  background: var(--success);
+  color: #ffffff;
+}
+
+.app.dark .copyButton.copied,
+.app.dark .copyButton.copied:hover:not(:disabled) {
+  background: var(--success-strong);
+  color: #102014;
+}
+
+:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 3px;
+}
+
+@media (max-width: 520px) {
+  .app {
+    align-items: stretch;
+    padding: 18px;
+  }
+
+  .topbar {
+    gap: 12px;
+  }
+
+  .panel {
+    padding: 18px;
+  }
+
+  .brand {
+    min-width: 0;
+  }
+}
