@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { Check, Clipboard, KeyRound, Moon, RefreshCw, Sun } from "lucide-react";
 import "./styles.css";
@@ -106,6 +106,7 @@ function App() {
   const [error, setError] = useState("");
   const [copied, setCopied] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const secretInputRef = useRef<HTMLInputElement>(null);
   const [timeStep, setTimeStep] = useState<number>(() =>
     Math.floor(Date.now() / 1000 / TOTP_STEP_SECONDS),
   );
@@ -119,6 +120,10 @@ function App() {
     }, 500);
 
     return () => window.clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
+    secretInputRef.current?.focus();
   }, []);
 
   useEffect(() => {
@@ -217,6 +222,7 @@ function App() {
           <label className="field">
             <span>Base32 Secret Key</span>
             <input
+              ref={secretInputRef}
               autoCapitalize="characters"
               autoComplete="off"
               autoCorrect="off"
