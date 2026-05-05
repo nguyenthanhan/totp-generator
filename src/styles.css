@@ -192,6 +192,11 @@ input:focus {
 
 .errorText {
   color: var(--danger);
+  min-height: 1.5em;
+}
+
+.errorText.isHidden {
+  visibility: hidden;
 }
 
 .generateButton {

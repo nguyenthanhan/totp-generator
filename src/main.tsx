@@ -6,11 +6,11 @@ import "./styles.css";
 const TOTP_STEP_SECONDS = 30;
 const DIGITS = 6;
 
-function normalizeSecret(value) {
+function normalizeSecret(value: string): string {
   return value.replace(/\s+/g, "").replace(/=+$/g, "").toUpperCase();
 }
 
-function decodeBase32(secret) {
+function decodeBase32(secret: string): Uint8Array {
   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
   const normalized = normalizeSecret(secret);
   const allowedLengthRemainders = new Set([0, 2, 4, 5, 7]);
@@ -40,7 +40,7 @@ function decodeBase32(secret) {
     throw new Error("Use a valid Base32 secret padding.");
   }
 
-  const bytes = [];
+  const bytes: number[] = [];
   for (let i = 0; i + 8 <= bits.length; i += 8) {
     bytes.push(Number.parseInt(bits.slice(i, i + 8), 2));
   }
@@ -48,7 +48,7 @@ function decodeBase32(secret) {
   return new Uint8Array(bytes);
 }
 
-function counterToBytes(counter) {
+function counterToBytes(counter: number): ArrayBuffer {
   const buffer = new ArrayBuffer(8);
   const view = new DataView(buffer);
   const high = Math.floor(counter / 0x100000000);
@@ -60,7 +60,20 @@ function counterToBytes(counter) {
   return buffer;
 }
 
-async function generateTotp(secret, timestamp) {
+function readSecretFromUrlSearch(): string {
+  if (typeof window === "undefined") {
+    return "";
+  }
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const raw = params.get("secret") ?? params.get("key") ?? params.get("s") ?? "";
+    return raw.trim();
+  } catch {
+    return "";
+  }
+}
+
+async function generateTotp(secret: string, timestamp: number): Promise<string> {
   const keyBytes = decodeBase32(secret);
   if (keyBytes.length === 0) {
     return "";
@@ -75,11 +88,7 @@ async function generateTotp(secret, timestamp) {
   );
 
   const counter = Math.floor(timestamp / 1000 / TOTP_STEP_SECONDS);
-  const signature = await crypto.subtle.sign(
-    "HMAC",
-    cryptoKey,
-    counterToBytes(counter),
-  );
+  const signature = await crypto.subtle.sign("HMAC", cryptoKey, counterToBytes(counter));
   const hmac = new Uint8Array(signature);
   const offset = hmac[hmac.length - 1] & 0x0f;
   const binary =
@@ -92,12 +101,12 @@ async function generateTotp(secret, timestamp) {
 }
 
 function App() {
-  const [secret, setSecret] = useState("");
+  const [secret, setSecret] = useState<string>(readSecretFromUrlSearch);
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const [copied, setCopied] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
-  const [timeStep, setTimeStep] = useState(() =>
+  const [timeStep, setTimeStep] = useState<number>(() =>
     Math.floor(Date.now() / 1000 / TOTP_STEP_SECONDS),
   );
 
@@ -106,9 +115,7 @@ function App() {
   useEffect(() => {
     const intervalId = window.setInterval(() => {
       const nextStep = Math.floor(Date.now() / 1000 / TOTP_STEP_SECONDS);
-      setTimeStep((currentStep) =>
-        currentStep === nextStep ? currentStep : nextStep,
-      );
+      setTimeStep((currentStep) => (currentStep === nextStep ? currentStep : nextStep));
     }, 500);
 
     return () => window.clearInterval(intervalId);
@@ -222,14 +229,17 @@ function App() {
             />
           </label>
           <p id="secret-help" className="helpText">
-            Your secret is processed only in this browser. It is not stored,
-            logged, or sent anywhere. Spaces and lowercase letters are accepted.
+            Your secret is processed only in this browser. It is not stored, logged, or sent
+            anywhere. Spaces and lowercase letters are accepted.
           </p>
-          {error ? (
-            <p id="secret-error" className="errorText" role="alert">
-              {error}
-            </p>
-          ) : null}
+          <p
+            id="secret-error"
+            className={error ? "errorText" : "errorText isHidden"}
+            role="alert"
+            aria-live="polite"
+          >
+            {error || " "}
+          </p>
 
           <button className="generateButton" type="button" onClick={handleGenerate}>
             <RefreshCw size={18} />
@@ -266,7 +276,13 @@ function App() {
   );
 }
 
-createRoot(document.getElementById("root")).render(
+const rootElement = document.getElementById("root");
+
+if (!rootElement) {
+  throw new Error("Root element not found.");
+}
+
+createRoot(rootElement).render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
